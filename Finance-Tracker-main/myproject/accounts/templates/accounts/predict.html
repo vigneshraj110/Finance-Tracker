@@ -1,0 +1,62 @@
+<!-- templates/accounts/predict.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2; /* Light gray background */
+        }
+
+        .container {
+            margin-top: 50px;
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            text-align: center;
+        }
+
+        h2 {
+            color: #007bff; /* Bootstrap blue color for heading */
+        }
+
+        p {
+            color: #28a745; /* Bootstrap green color for text */
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            border-radius: 8px;
+        }
+
+        .btn-secondary {
+            background-color: #007bff; /* Bootstrap blue color for button */
+            border-color: #007bff; /* Bootstrap blue color for button border */
+        }
+
+        .btn-secondary:hover {
+            background-color: #0056b3; /* Darker shade of blue on hover */
+            border-color: #0056b3; /* Darker shade of blue for button border on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Next Month Expense Prediction</h2>
+        <p>Predicted Expense for Next Month: <span style="color: #28a745;">${{ next_month_expense }}</span></p>
+        <img src="{{ plot_path }}" alt="Expense Prediction">
+        <br>
+        <a href="{% url 'welcome' %}" class="btn btn-secondary mt-3">Back to Home Page</a>
+    </div>
+</body>
+</html>

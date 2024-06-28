@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .left-side {
+            flex: 1;
+            margin-right: 20px;
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .right-side {
+            flex: 2;
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            max-width: 600px;
+        }
+
+        .progress-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            background-color: #007bff; /* Blue color */
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .level-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            background-color: #28a745; /* Green color */
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .lives-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            background-color: #dc3545; /* Red color */
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .btn-blue {
+            background-color: #007bff; /* Bootstrap blue color */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .btn-blue:hover {
+            background-color: #0056b3; /* Darker shade of blue on hover */
+        }
+
+        .item-form {
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            margin-bottom: 20px;
+        }
+
+        .display-items {
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            margin-bottom: 20px;
+        }
+
+        .budget-warning {
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="left-side">
+        <h2>Welcome to the Main Page</h2>
+        <h3>Your Financial Tracker</h3>
+        <!-- Progress -->
+        <div class="progress-number">{{ progress_bar }}</div>
+        <!-- Level -->
+        <div class="level-number">{{ level_number }}</div>
+        <!-- Lives -->
+        {% if current_lives is not None %}
+            <div class="lives-number">{{ current_lives }}</div>
+        {% endif %}
+        
+        <!-- Monthly Budget Form -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ budget_form.as_p }}
+            <button type="submit" class="btn-blue" name="set_budget">Set Monthly Budget</button>
+        </form>
+        
+        <!-- Navigation Buttons -->
+        <div>
+            <a href="{% url 'predict' %}" class="btn btn-blue mt-3">Expense Prediction</a>
+            <a href="{% url 'summary' %}" class="btn btn-blue">Summary</a>
+            <form action="{% url 'download_items_csv' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-blue">Download as CSV</button>
+            </form>
+            <a href="{% url 'logout' %}" class="btn btn-blue">Logout</a>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <!-- Add Item Form -->
+        <div class="item-form">
+            <h3>Add Item</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ add_form.as_p }}
+                <button type="submit" class="btn btn-primary" name="add_item">Add Item</button>
+            </form>
+        </div>
+
+        <!-- Display Existing Items -->
+        <div class="display-items">
+            <h3>All Items</h3>
+            <ul>
+                {% for item in items %}
+                <li>{{ item.name }} - ${{ item.cost }} - {{ item.month }}/{{ item.year }} - {{ item.tag }}
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button type="submit" name="remove_item" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Display Items by Tag -->
+        <div class="display-items">
+            <h3>Items by Tag</h3>
+            {% for tag, item_names in items_by_tag.items %}
+                <h4>{{ tag }}</h4>
+                <ul>
+                    {% for item_name in item_names %}
+                        <li>{{ item_name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+
+        <!-- Budget Exceedance Alert -->
+        {% if exceeded_months %}
+            <div class="budget-warning">
+                <h3 style="color: red;">Alert: Monthly budget exceeded for these months: {{ exceeded_months|join:", " }}</h3>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

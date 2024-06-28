@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Summary</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* Light gray background */
+            font-family: Arial, sans-serif; /* Specify a fallback font family */
+        }
+
+        h2, h3 {
+            color: #007bff; /* Bootstrap blue color for headings */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            border-radius: 8px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff; /* Bootstrap blue color for button */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3; /* Darker shade of blue on hover */
+        }
+
+        .container {
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Slight shadow */
+            text-align: center;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .flex-item {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Expense Timeline Summary</h2>
+        <div class="flex-container">
+            <div class="flex-item">
+                <h3>Expense Timeline</h3>
+                <img src="{{ line_plot_path }}" alt="Expense Timeline">
+            </div>
+            <div class="flex-item">
+                <h3>Total Expenses by Tags</h3>
+                <img src="{{ pie_plot_path }}" alt="Expense Breakdown by Tags">
+            </div>
+        </div>
+        <a href="{% url 'welcome' %}" class="btn btn-primary mt-3">Back to Welcome</a>
+    </div>
+</body>
+</html>
